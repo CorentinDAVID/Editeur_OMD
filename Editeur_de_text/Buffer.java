@@ -74,6 +74,13 @@ public class Buffer {
         zoneText.setText("<html><body><font color='black'>"+memoire1+"<font color='blue'>"+caseSelect+"<font color='black'>"+memoire2+"</body></html>");
     }
 
+    /**
+     * 
+     * @param s La nouvelle entree du clavier
+     * @param p La position du curseur
+     * 
+     * Fonction qui ajoute la nouvelle entree dans la liste de saisie a la position du curseur
+     */
     public void add(String s,int p) {
         List<String> memoire = new ArrayList<>();
         for(int i=0;i<saisie.size();i++){
