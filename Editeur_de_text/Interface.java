@@ -18,6 +18,9 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 
     public Boolean selection;
 
+    public Copier copier;
+    public Coller coller;
+
     public Interface() {
         fenetre = new JFrame();
         fenetre.addKeyListener(this);
@@ -30,6 +33,28 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 
         selection = false;
 
+        JMenuBar mb = new JMenuBar();
+
+        JMenu menu = new JMenu("Editeur de texte");
+
+        JMenuItem copy = new JMenuItem("copy");
+        JMenuItem paste = new JMenuItem("paste");
+        JMenuItem cut = new JMenuItem("cut");
+
+        menu.add(copy);
+        menu.add(paste);
+        menu.add(cut);
+
+        copy.addActionListener(this);
+        paste.addActionListener(this);
+        cut.addActionListener(this);
+
+        copier = new Copier(buffer);
+        coller = new Coller(buffer);
+
+        mb.add(menu);
+
+        fenetre.setJMenuBar(mb);
         fenetre.add(text);
         fenetre.setSize(600, 600);
         fenetre.setLocationRelativeTo(null);
@@ -40,6 +65,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent arg0) {
         // TODO Auto-generated method stub
+        System.out.println(arg0.getKeyCode());
         if (arg0.getKeyCode() == 8) {
             buffer.remove();
         } else if (arg0.getKeyCode() == 16) {
@@ -64,7 +90,14 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
             } else {
                 buffer.positionGauche();
             }
-        } else {
+        }
+        else if(arg0.getKeyCode() == 17){
+            copier.execute();
+        }
+        else if(arg0.getKeyCode() == 18){
+            coller.execute();
+        }
+        else {
             buffer.add(String.valueOf(arg0.getKeyChar()),buffer.getPosition());
         }
         buffer.update();
