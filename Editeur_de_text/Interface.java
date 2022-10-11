@@ -45,25 +45,27 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         } else if (arg0.getKeyCode() == 16) {
             if (selection) {
                 selection = false;
+                buffer.setEtat(false);
                 System.out.println("Selection désactivée");
             } else {
                 selection = true;
+                buffer.setEtat(true);
                 System.out.println("Selection activée");
             }
         } else if (arg0.getKeyCode() == 39) {
             if (selection) {
-                // buffer.selectionDroit();
+                buffer.selectionDroit();
             } else {
                 buffer.positionDroit();
             }
         } else if (arg0.getKeyCode() == 37) {
             if (selection) {
-                // buffer.selectionGauche();
+                buffer.selectionGauche();
             } else {
                 buffer.positionGauche();
             }
         } else {
-            buffer.add(String.valueOf(arg0.getKeyChar()));
+            buffer.add(String.valueOf(arg0.getKeyChar()),buffer.getPosition());
         }
         buffer.update();
 
