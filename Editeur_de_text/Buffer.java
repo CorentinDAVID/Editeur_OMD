@@ -115,11 +115,14 @@ public class Buffer {
      */
     public void remove() {
         //supression du caractere a la position
-        saisie.remove(position);
+        for(int i=position;i<=selection;i++){
+            saisie.remove(i);
+        }
 
         //On decale le curseur vers la gauche si la saisie n'est pas vide
         if (position > 0) {
             position--;
+            selection = position;
         }
     }
 
@@ -202,6 +205,18 @@ public class Buffer {
 
         //On utilise la fonction ajout avec le nouveau String et la position du curseur
         add(ajout,position);
+    }
+
+    public void couper(){
+        //Reinitialisation de la sauvegarde
+        sauvegarde = new ArrayList<>();
+
+        //ajoute tous les caracteres issus de la saisie dans la sauvegarde entre la position du curseur et la fin de la zone de selection
+        for(int i=position;i<=selection;i++){
+            sauvegarde.add(saisie.get(i));
+        }
+
+        remove();
     }
 
 }

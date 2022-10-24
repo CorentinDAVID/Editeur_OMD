@@ -23,6 +23,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     //Commandes
     public Copier copier;
     public Coller coller;
+    public Couper couper;
 
     public Interface() {
         //Initialisation de la fenetre
@@ -63,6 +64,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         //Creation des commandes
         copier = new Copier(buffer);
         coller = new Coller(buffer);
+        couper = new Couper(buffer);
 
         //Ajout du menu a la barre de menu
         mb.add(menu);
@@ -124,6 +126,9 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         //Appel la methode execute de coller si on appuie sur ALT (a changer avec des boutons)
         else if(arg0.getKeyCode() == 18){
             coller.execute();
+        }
+        else if(arg0.getKeyCode() == 153){
+            couper.execute();
         }
         //On ajoute la saisie dans le buffer
         else {
