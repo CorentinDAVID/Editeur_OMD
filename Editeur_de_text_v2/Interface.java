@@ -1,4 +1,4 @@
-package Editeur_de_text;
+package Editeur_de_text_v2;
 
 import java.awt.*;
 import javax.swing.*;
@@ -16,6 +16,8 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     public Buffer buffer;
 
     public JLabel text;
+
+    public List<Buffer> tab_buffer = new ArrayList<>();
 
     //Booleen pour savoir si on est en mode selection ou non
     public Boolean selection;
@@ -130,13 +132,18 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         else if(arg0.getKeyCode() == 153){
             couper.execute();
         }
+        else if(arg0.getKeyCode() == 127){
+            if(tab_buffer.size()>0){
+                buffer = tab_buffer.get(tab_buffer.size()-1);
+            }
+        }
         //On ajoute la saisie dans le buffer
         else {
             buffer.add(String.valueOf(arg0.getKeyChar()),buffer.getPosition());
         }
         //On update la mise a jour du buffer
         buffer.update();
-
+        tab_buffer.add(buffer);
     }
 
     @Override

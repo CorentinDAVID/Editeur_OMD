@@ -1,4 +1,4 @@
-package Editeur_de_text;
+package Editeur_de_text_v1;
 
 import java.awt.*;
 import javax.swing.*;

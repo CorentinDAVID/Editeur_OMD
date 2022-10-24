@@ -1,4 +1,4 @@
-package Editeur_de_text;
+package Editeur_de_text_v2;
 
 public class main {
     public static void main(String[] args) {
