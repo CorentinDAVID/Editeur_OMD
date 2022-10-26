@@ -102,7 +102,6 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
      * Fonction qui entre en jeu si une touche du clavier est appuyee
      */
     public void keyPressed(KeyEvent arg0) {
-        // System.out.println(arg0.getKeyCode());
         // applique la fonction retirer un caractere si on appuie sur la touche
         // BACK_SPACE
         if (arg0.getKeyCode() == 8) {
