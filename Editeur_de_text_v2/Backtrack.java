@@ -11,10 +11,10 @@ public class Backtrack implements Commandes {
     }
 
     /**
-     * Fonction qui va appeler la methode coller du Buffer courant
+     * Fonction qui va appeler la methode backtrack du Buffer courant
      */
     public void execute() {
-        // appel de la methode coller
+        // appel de la methode backtrack
         b.backtrack();
     }
 }

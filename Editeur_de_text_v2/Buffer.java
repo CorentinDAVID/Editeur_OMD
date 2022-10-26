@@ -24,12 +24,16 @@ public class Buffer {
     // Tableau qui va prendre les entrés de textes du clavier dans l'ordre
     private List<String> saisie;
 
+    // Tableau contenant toutes les saisies de l'éditeur
     private List<List<String>> tab_saisie;
 
+    // Un pointeur sur la saisie dans laquelle nous sommes dans tab_saisie
     private int position_saisie;
 
+    // Un booleen pour savoir si on vient de faire un backtrack
     private boolean back;
 
+    // Tableau avec la position du curseur liée à la saisie de tab_saisie
     private List<Integer> tab_position;
 
     // Tableau qui va prendre la partie du tableau de saisie en fonction de la zone
@@ -39,6 +43,11 @@ public class Buffer {
     // Un booleen pour savoir si on est en mode selection ou non
     private Boolean etat;
 
+    // Un booleen pour savoir si l'entré du clavier entraine une modification de la
+    // saisie
+    private Boolean modification;
+
+    // Un fichier qui va servir à sauvegarder la saisie
     private Fichier f;
 
     // Constructeur de Buffer
@@ -54,6 +63,7 @@ public class Buffer {
         position_saisie = -1;
         back = false;
         etat = false;
+        modification = false;
     }
 
     /**
@@ -72,42 +82,49 @@ public class Buffer {
         if (!etat) {
             selection = position;
         }
-       // System.out.println("position: " + position + " selection: " + selection + " taille de la saisie: " + saisie.size());
 
-        // ici memoire1 représente la partie du texte entre le début et la position du
-        // curseur
-        String memoire1 = "";
-        for (int i = 0; i < position; i++) {
-            memoire1 = memoire1 + saisie.get(i);
+        // On vérifie que la liste n'est pas vide
+        if (saisie.size() > 0) {
+            // ici memoire1 représente la partie du texte entre le début et la position du
+            // curseur
+            String memoire1 = "";
+            for (int i = 0; i < position; i++) {
+                memoire1 = memoire1 + saisie.get(i);
+            }
+
+            // ici caseSelect représente le partie du texte dans la zone de selection (un
+            // seul caractere si l'etat est a false)
+            String caseSelect = "";
+            for (int i = position; i <= selection; i++) {
+                caseSelect = caseSelect + saisie.get(i);
+            }
+
+            // ici memoire2 represente le reste du texte
+            String memoire2 = "";
+            for (int i = selection + 1; i < saisie.size(); i++) {
+                memoire2 = memoire2 + saisie.get(i);
+            }
+
+            // ici on ajoute le texte initialise precedemment en changeant la couleur pour
+            // le curseur/la zone de selection
+            zoneText.setText("<html><body><font color='black'>" + memoire1 + "<font color='blue'>" + caseSelect
+                    + "<font color='black'>" + memoire2 + "</body></html>");
+        } else {
+            zoneText.setText("");
         }
 
-        // ici caseSelect représente le partie du texte dans la zone de selection (un
-        // seul caractere si l'etat est a false)
-        String caseSelect = "";
-        for (int i = position; i <= selection; i++) {
-            caseSelect = caseSelect + saisie.get(i);
-        }
-
-        // ici memoire2 represente le reste du texte
-        String memoire2 = "";
-        for (int i = selection + 1; i < saisie.size(); i++) {
-            memoire2 = memoire2 + saisie.get(i);
-        }
-
-        // ici on ajoute le texte initialise precedemment en changeant la couleur pour
-        // le curseur/la zone de selection
-        zoneText.setText("<html><body><font color='black'>" + memoire1 + "<font color='blue'>" + caseSelect
-                + "<font color='black'>" + memoire2 + "</body></html>");
-
-        if(!back){
+        // On verifie qu'on ne vient pas de faire un backtrack et qu'on vient de faire
+        // une modification
+        if (!back && modification) {
+            // On ajoute aux tableaux de sauvegarde de saisie, la nouvelle saisie à la
+            // position_saisie courante
             position_saisie++;
-            tab_saisie.add(position_saisie,saisie);
-            tab_position.add(position_saisie,position);
+            tab_saisie.add(position_saisie, saisie);
+            tab_position.add(position_saisie, position);
         }
-        
-        System.out.println(position_saisie);
-        System.out.println(tab_saisie);
+
         back = false;
+        modification = false;
     }
 
     /**
@@ -119,32 +136,38 @@ public class Buffer {
      *          position du curseur
      */
     public void add(String s, int p) {
-        // On reset la memoire
-        List<String> memoire = new ArrayList<>();
+        // On verifie que la liste n'est pas vide
+        if (saisie.size() > 0) {
+            // On reset la memoire
+            List<String> memoire = new ArrayList<>();
 
-        // On ajoute tous les elements de la liste de saisie
-        for (int i = 0; i < saisie.size(); i++) {
-            memoire.add(saisie.get(i));
-        }
+            // On ajoute tous les elements de la liste de saisie
+            for (int i = 0; i < saisie.size(); i++) {
+                memoire.add(saisie.get(i));
+            }
 
-        // reinitialise la saisie a 0
-        saisie = new ArrayList<>();
+            // reinitialise la saisie a 0
+            saisie = new ArrayList<>();
 
-        // ajoute a la saisie la partie en memoire du debut a la position du curseur
-        for (int i = 0; i <= position; i++) {
-            saisie.add(memoire.get(i));
-        }
+            // ajoute a la saisie la partie en memoire du debut a la position du curseur
+            for (int i = 0; i <= position; i++) {
+                saisie.add(memoire.get(i));
+            }
 
-        // on rajoute la nouvelle entree du clavier
-        saisie.add(s);
+            // on rajoute la nouvelle entree du clavier
+            saisie.add(s);
 
-        // ajoute le reste de la memoire
-        for (int i = position + 1; i < memoire.size(); i++) {
-            saisie.add(memoire.get(i));
+            // ajoute le reste de la memoire
+            for (int i = position + 1; i < memoire.size(); i++) {
+                saisie.add(memoire.get(i));
+            }
+        } else {
+            saisie.add(s);
         }
 
         // incremente la position du curseur
         position++;
+        modification = true;
     }
 
     /**
@@ -154,16 +177,17 @@ public class Buffer {
         // supression du caractere a la position
         List<String> new_saisie = new ArrayList<>();
         for (int i = 0; i < saisie.size(); i++) {
-            if(!(i >= position && i <= selection) && saisie.size()>1){
+            if (!(i >= position && i <= selection) && saisie.size() > 1) {
                 new_saisie.add(saisie.get(i));
             }
         }
         saisie = new_saisie;
         // On decale le curseur vers la gauche si la saisie n'est pas vide
-        if (position > 0) {
+        if (position > -1) {
             position--;
         }
         selection = position;
+        modification = true;
     }
 
     /**
@@ -267,15 +291,29 @@ public class Buffer {
         remove();
     }
 
-    public void save(){
+    /**
+     * Fonction qui va créer le fichier de sauvegarde de la saisie courante
+     */
+    public void save() {
         f = new Fichier(getSaisie());
     }
 
-    public void backtrack(){
-        saisie = tab_saisie.get(position_saisie-1);
-        position = tab_position.get(position_saisie-1);
-        position_saisie--;
-        back = true;
+    /**
+     * Fonction qui va modifier la saisie et le pointeur courant, avec leurs valeurs
+     * precedentes grace a tab_saisie et tab_pointeur
+     */
+    public void backtrack() {
+        if (position_saisie > 0) {
+            saisie = tab_saisie.get(position_saisie - 1);
+            position = tab_position.get(position_saisie - 1);
+            position_saisie--;
+            back = true;
+        }
+        // Si on atteint le début de tab_saisie on vide la saisie courante
+        else if (position_saisie == 0) {
+            saisie = new ArrayList<>();
+            position = -1;
+        }
     }
 
     /**
