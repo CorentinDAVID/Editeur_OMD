@@ -6,11 +6,13 @@ import java.nio.file.Paths;
 
 public class Fichier {
 
+    // Le contenu de la saisie à sauvegarder
     private String contenu;
 
     public Fichier(String contenu) {
         this.contenu = contenu;
 
+        // On crée le fichier sauvegarde.txt puis on y enregistre le contenu
         Path path = Paths.get("./sauvegarde.txt");
         try {
             byte[] bs = contenu.getBytes();

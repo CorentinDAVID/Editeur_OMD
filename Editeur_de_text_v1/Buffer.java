@@ -59,30 +59,34 @@ public class Buffer {
             selection = position;
         }
 
-        // ici memoire1 représente la partie du texte entre le début et la position du
-        // curseur
-        String memoire1 = "";
-        for (int i = 0; i < position; i++) {
-            memoire1 = memoire1 + saisie.get(i);
-        }
+        if (saisie.size() > 0) {
+            // ici memoire1 représente la partie du texte entre le début et la position du
+            // curseur
+            String memoire1 = "";
+            for (int i = 0; i < position; i++) {
+                memoire1 = memoire1 + saisie.get(i);
+            }
 
-        // ici caseSelect représente le partie du texte dans la zone de selection (un
-        // seul caractere si l'etat est a false)
-        String caseSelect = "";
-        for (int i = position; i <= selection; i++) {
-            caseSelect = caseSelect + saisie.get(i);
-        }
+            // ici caseSelect représente le partie du texte dans la zone de selection (un
+            // seul caractere si l'etat est a false)
+            String caseSelect = "";
+            for (int i = position; i <= selection; i++) {
+                caseSelect = caseSelect + saisie.get(i);
+            }
 
-        // ici memoire2 represente le reste du texte
-        String memoire2 = "";
-        for (int i = selection + 1; i < saisie.size(); i++) {
-            memoire2 = memoire2 + saisie.get(i);
-        }
+            // ici memoire2 represente le reste du texte
+            String memoire2 = "";
+            for (int i = selection + 1; i < saisie.size(); i++) {
+                memoire2 = memoire2 + saisie.get(i);
+            }
 
-        // ici on ajoute le texte initialise precedemment en changeant la couleur pour
-        // le curseur/la zone de selection
-        zoneText.setText("<html><body><font color='black'>" + memoire1 + "<font color='blue'>" + caseSelect
-                + "<font color='black'>" + memoire2 + "</body></html>");
+            // ici on ajoute le texte initialise precedemment en changeant la couleur pour
+            // le curseur/la zone de selection
+            zoneText.setText("<html><body><font color='black'>" + memoire1 + "<font color='blue'>" + caseSelect
+                    + "<font color='black'>" + memoire2 + "</body></html>");
+        } else {
+            zoneText.setText("");
+        }
     }
 
     /**
@@ -94,28 +98,32 @@ public class Buffer {
      *          position du curseur
      */
     public void add(String s, int p) {
-        // On reset la memoire
-        List<String> memoire = new ArrayList<>();
+        if (saisie.size() > 0) {
+            // On reset la memoire
+            List<String> memoire = new ArrayList<>();
 
-        // On ajoute tous les elements de la liste de saisie
-        for (int i = 0; i < saisie.size(); i++) {
-            memoire.add(saisie.get(i));
-        }
+            // On ajoute tous les elements de la liste de saisie
+            for (int i = 0; i < saisie.size(); i++) {
+                memoire.add(saisie.get(i));
+            }
 
-        // reinitialise la saisie a 0
-        saisie = new ArrayList<>();
+            // reinitialise la saisie a 0
+            saisie = new ArrayList<>();
 
-        // ajoute a la saisie la partie en memoire du debut a la position du curseur
-        for (int i = 0; i <= position; i++) {
-            saisie.add(memoire.get(i));
-        }
+            // ajoute a la saisie la partie en memoire du debut a la position du curseur
+            for (int i = 0; i <= position; i++) {
+                saisie.add(memoire.get(i));
+            }
 
-        // on rajoute la nouvelle entree du clavier
-        saisie.add(s);
+            // on rajoute la nouvelle entree du clavier
+            saisie.add(s);
 
-        // ajoute le reste de la memoire
-        for (int i = position + 1; i < memoire.size(); i++) {
-            saisie.add(memoire.get(i));
+            // ajoute le reste de la memoire
+            for (int i = position + 1; i < memoire.size(); i++) {
+                saisie.add(memoire.get(i));
+            }
+        } else {
+            saisie.add(s);
         }
 
         // incremente la position du curseur
@@ -129,13 +137,13 @@ public class Buffer {
         // supression du caractere a la position
         List<String> new_saisie = new ArrayList<>();
         for (int i = 0; i < saisie.size(); i++) {
-            if(!(i >= position && i <= selection)){
+            if (!(i >= position && i <= selection)) {
                 new_saisie.add(saisie.get(i));
             }
         }
         saisie = new_saisie;
         // On decale le curseur vers la gauche si la saisie n'est pas vide
-        if (position > 0) {
+        if (position > -1) {
             position--;
         }
         selection = position;

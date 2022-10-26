@@ -26,6 +26,11 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     private Couper couper;
     private Save sauvegarder;
     private Backtrack backtrack;
+    private Remove remove;
+    private PositionDroit positionDroit;
+    private PositionGauche positionGauche;
+    private SelectionDroit selectionDroit;
+    private SelectionGauche selectionGauche;
 
     public Interface() {
         // Initialisation de la fenetre
@@ -72,6 +77,11 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         couper = new Couper(buffer);
         sauvegarder = new Save(buffer);
         backtrack = new Backtrack(buffer);
+        remove = new Remove(buffer);
+        positionDroit = new PositionDroit(buffer);
+        positionGauche = new PositionGauche(buffer);
+        selectionDroit = new SelectionDroit(buffer);
+        selectionGauche = new SelectionGauche(buffer);
 
         // Ajout du menu a la barre de menu
         mb.add(menu);
@@ -92,11 +102,11 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
      * Fonction qui entre en jeu si une touche du clavier est appuyee
      */
     public void keyPressed(KeyEvent arg0) {
-        //System.out.println(arg0.getKeyCode());
+        // System.out.println(arg0.getKeyCode());
         // applique la fonction retirer un caractere si on appuie sur la touche
         // BACK_SPACE
         if (arg0.getKeyCode() == 8) {
-            buffer.remove();
+            remove.execute();
         }
         // On active ou desactive le mode de selction si on appuie sur la touche MAJ
         else if (arg0.getKeyCode() == 16) {
@@ -116,18 +126,18 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         // la selection, sinon on deplace le curseur
         else if (arg0.getKeyCode() == 39) {
             if (selection) {
-                buffer.selectionDroit();
+                selectionDroit.execute();
             } else {
-                buffer.positionDroit();
+                positionDroit.execute();
             }
         }
         // si on appuie sur la fleche de gauche et qu'on est en mode selection on reduit
         // la selection, sinon on deplace le curseur
         else if (arg0.getKeyCode() == 37) {
             if (selection) {
-                buffer.selectionGauche();
+                selectionGauche.execute();
             } else {
-                buffer.positionGauche();
+                positionGauche.execute();
             }
         } else if (arg0.getKeyCode() == 17) {
             backtrack.execute();
@@ -154,8 +164,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        // TODO Auto-generated method stub
-
+        // Si un des boutons est activés l'action sera ici
         if (arg0.getActionCommand() == "copy") {
             copier.execute();
             System.out.println("La selection a été aujoutée dans le presse-papier");
