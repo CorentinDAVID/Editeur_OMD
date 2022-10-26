@@ -24,12 +24,22 @@ public class Buffer {
     // Tableau qui va prendre les entrés de textes du clavier dans l'ordre
     private List<String> saisie;
 
+    private List<List<String>> tab_saisie;
+
+    private int position_saisie;
+
+    private boolean back;
+
+    private List<Integer> tab_position;
+
     // Tableau qui va prendre la partie du tableau de saisie en fonction de la zone
     // de selection
     private List<String> sauvegarde;
 
     // Un booleen pour savoir si on est en mode selection ou non
     private Boolean etat;
+
+    private Fichier f;
 
     // Constructeur de Buffer
     public Buffer(JLabel text) {
@@ -39,6 +49,10 @@ public class Buffer {
         selection = 0;
         saisie = new ArrayList<>();
         sauvegarde = new ArrayList<>();
+        tab_saisie = new ArrayList<>();
+        tab_position = new ArrayList<>();
+        position_saisie = -1;
+        back = false;
         etat = false;
     }
 
@@ -58,6 +72,7 @@ public class Buffer {
         if (!etat) {
             selection = position;
         }
+       // System.out.println("position: " + position + " selection: " + selection + " taille de la saisie: " + saisie.size());
 
         // ici memoire1 représente la partie du texte entre le début et la position du
         // curseur
@@ -83,6 +98,16 @@ public class Buffer {
         // le curseur/la zone de selection
         zoneText.setText("<html><body><font color='black'>" + memoire1 + "<font color='blue'>" + caseSelect
                 + "<font color='black'>" + memoire2 + "</body></html>");
+
+        if(!back){
+            position_saisie++;
+            tab_saisie.add(position_saisie,saisie);
+            tab_position.add(position_saisie,position);
+        }
+        
+        System.out.println(position_saisie);
+        System.out.println(tab_saisie);
+        back = false;
     }
 
     /**
@@ -127,15 +152,18 @@ public class Buffer {
      */
     public void remove() {
         // supression du caractere a la position
-        for (int i = position; i <= selection; i++) {
-            saisie.remove(i);
+        List<String> new_saisie = new ArrayList<>();
+        for (int i = 0; i < saisie.size(); i++) {
+            if(!(i >= position && i <= selection) && saisie.size()>1){
+                new_saisie.add(saisie.get(i));
+            }
         }
-
+        saisie = new_saisie;
         // On decale le curseur vers la gauche si la saisie n'est pas vide
         if (position > 0) {
             position--;
-            selection = position;
         }
+        selection = position;
     }
 
     /**
@@ -237,6 +265,17 @@ public class Buffer {
         }
 
         remove();
+    }
+
+    public void save(){
+        f = new Fichier(getSaisie());
+    }
+
+    public void backtrack(){
+        saisie = tab_saisie.get(position_saisie-1);
+        position = tab_position.get(position_saisie-1);
+        position_saisie--;
+        back = true;
     }
 
     /**

@@ -127,15 +127,18 @@ public class Buffer {
      */
     public void remove() {
         // supression du caractere a la position
-        for (int i = position; i <= selection; i++) {
-            saisie.remove(i);
+        List<String> new_saisie = new ArrayList<>();
+        for (int i = 0; i < saisie.size(); i++) {
+            if(!(i >= position && i <= selection)){
+                new_saisie.add(saisie.get(i));
+            }
         }
-
+        saisie = new_saisie;
         // On decale le curseur vers la gauche si la saisie n'est pas vide
         if (position > 0) {
             position--;
-            selection = position;
         }
+        selection = position;
     }
 
     /**

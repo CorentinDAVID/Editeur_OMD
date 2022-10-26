@@ -17,10 +17,6 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 
     private JLabel text;
 
-    private List<Buffer> tab_buffer = new ArrayList<>();
-
-    private Fichier f;
-
     // Booleen pour savoir si on est en mode selection ou non
     private Boolean selection;
 
@@ -28,6 +24,8 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     private Copier copier;
     private Coller coller;
     private Couper couper;
+    private Save sauvegarder;
+    private Backtrack backtrack;
 
     public Interface() {
         // Initialisation de la fenetre
@@ -72,6 +70,8 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         copier = new Copier(buffer);
         coller = new Coller(buffer);
         couper = new Couper(buffer);
+        sauvegarder = new Save(buffer);
+        backtrack = new Backtrack(buffer);
 
         // Ajout du menu a la barre de menu
         mb.add(menu);
@@ -92,6 +92,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
      * Fonction qui entre en jeu si une touche du clavier est appuyee
      */
     public void keyPressed(KeyEvent arg0) {
+        //System.out.println(arg0.getKeyCode());
         // applique la fonction retirer un caractere si on appuie sur la touche
         // BACK_SPACE
         if (arg0.getKeyCode() == 8) {
@@ -128,10 +129,8 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
             } else {
                 buffer.positionGauche();
             }
-        } else if (arg0.getKeyCode() == 127) {
-            if (tab_buffer.size() > 0) {
-                buffer = tab_buffer.get(tab_buffer.size() - 1);
-            }
+        } else if (arg0.getKeyCode() == 17) {
+            backtrack.execute();
         }
         // On ajoute la saisie dans le buffer
         else {
@@ -139,7 +138,6 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         }
         // On update la mise a jour du buffer
         buffer.update();
-        tab_buffer.add(buffer);
     }
 
     @Override
@@ -171,11 +169,10 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
             System.out.println("La selection a été ajoutée dans le presse-papier puis enlevée de la saisie");
 
         } else if (arg0.getActionCommand() == "save") {
-            f = new Fichier(buffer.getSaisie());
+            sauvegarder.execute();
 
         }
 
         buffer.update();
-        tab_buffer.add(buffer);
     }
 }
