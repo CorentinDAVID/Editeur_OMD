@@ -87,7 +87,6 @@ public class Buffer {
         } else {
             zoneText.setText("");
         }
-        System.out.println(saisie);
     }
 
     /**

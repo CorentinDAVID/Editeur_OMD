@@ -99,8 +99,10 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         // BACK_SPACE
         if (arg0.getKeyCode() == 8) {
             remove.execute();
-        } else if (arg0.getKeyCode() == 10) {
-            buffer.add("\n", buffer.getPosition());
+        }
+        //applique un saut de ligne si on appuie sur ENTRE
+        else if (arg0.getKeyCode() == 10) {
+            buffer.add("<br>", buffer.getPosition());
         }
         // On active ou desactive le mode de selction si on appuie sur la touche MAJ
         else if (arg0.getKeyCode() == 16) {
